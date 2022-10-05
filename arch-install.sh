@@ -106,8 +106,9 @@ passwd
 # Create user account
 echo "Enter name of sudo user: "
 read $user
-useradd -mG wheel,audio,video,storage $user
-# Set user password
+useradd -m $user
+usermod -aG wheel,audio,video,storage $user
+# Set user passwordwheel,audio,video,storage 
 passwd $user
 # Configure sudo
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
