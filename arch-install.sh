@@ -117,7 +117,7 @@ echo "%sudo ALL=(ALL) ALL" >> /etc/sudoers
 pacman -S git
 rm -rf /etc/pacman.conf
 mkdir /.pac
-gitclone https://github.com/gustavray/pacconf ./.pac
+git clone https://github.com/gustavray/pacconf ./.pac
 cp -r ./.pac/pacman.conf /etc/
 
 # Update after enabling multilib and other pacman.conf options
@@ -166,11 +166,11 @@ git clone https://aur.archlinux.org/pikaur.git
 cd pikaur
 makepkg -fsri
 
-printf '\033c'
-echo "Installation Complete! Rebooting: (Press return): "
-read $aaa
+#printf '\033c'
+#echo "Installation Complete! Rebooting: (Press return): "
+#read $aaa
 
-sleep 2s
-exit
+#sleep 2s
+#exit
 
-systemctl reboot
+#systemctl reboot
