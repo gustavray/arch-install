@@ -50,7 +50,6 @@ sed '1,/^#part2$/d' `basename $0` > /mnt/arch-install2.sh
 #mv /home/arch-install2.sh /mnt
 chmod +x /mnt/arch-install2.sh
 arch-chroot /mnt ./arch-install2.sh
-    exit
 
 #part2
 
