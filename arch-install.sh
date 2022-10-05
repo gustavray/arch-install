@@ -46,10 +46,14 @@ mount $efipartition /mnt/boot/efi
 pacstrap /mnt base base-devel linux-zen linux-firmware vim nano
 # Generate an /etc/fstab and append it to /mnt/etc/fstab
 genfstab -U /mnt >> /mnt/etc/fstab
-####################################################################################
-# Chrooting
-arch-chroot /mnt
-####################################################################################
+sed '1,/^#part2$/d' `basename $0` > /mnt/arch-install2.sh
+#mv /home/arch-install2.sh /mnt
+chmod +x /mnt/arch-install2.sh
+arch-chroot /mnt ./arch-install2.sh
+    exit
+
+#part2
+
 # Install Intel Microcode
 read -p "Intel CPU? " -n 1 -r
 echo    # (optional) move to a new line
