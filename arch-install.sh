@@ -55,7 +55,21 @@ genfstab -U /mnt > /mnt/etc/fstab
 arch-chroot /mnt
 ####################################################################################
 # Install Intel Microcode
-pacman -S --noconfirm intel-ucode dhcpcd iwd
+read -p "Intel CPU? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    # Install Intel microcode
+    pacman -S --noconfirm intel-ucode dhcpcd iwd
+fi
+
+read -p "AMD CPU? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    # Install AMD microcode
+    pacman -S --noconfirm amd-ucode dhcpcd iwd
+fi
 
 # Change ParallelDownloads from 5 to 15
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
@@ -69,11 +83,11 @@ ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
 hwclock -lw
 
 # Set locale
-echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+echo "pt_BR.UTF-8 UTF-8" >> /etc/locale.gen
 # Generate locale
 locale-gen
 # Set locale.conf
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "LANG=pt_BR.UTF-8" > /etc/locale.conf
 # Set hostname
 echo "Hostname: "
 read hostname
@@ -108,10 +122,26 @@ grub-mkconfig -o /boot/grub/grub.cfg
 systemctl enable dhcpcd.service
 systemctl enable iwd.service
 
-pacman -S --noconfirm vim neofetch htop xorg xorg-xinit firefox xclip libreoffice-fresh pipewire pipewire-alsa pipewire-pulse pavucontrol plasma plasma-wayland-session
+pacman -S --noconfirm vim neofetch htop xorg xorg-xinit firefox xclip libreoffice-fresh pipewire pipewire-alsa pipewire-pulse pavucontrol plasma plasma-wayland-session 
 
 systemctl enable sddm.service
 systemctl enable NetworkManager.service
+
+# Updating pacman.conf to include multilib
+rm -rf /etc/pacman.conf
+mkdir /.pac
+gitclone https://github.com/gustavray/pacconf ./.pac
+cp -r ./.pac/pacman.conf /etc/
+
+#Install Pamac
+git clone https://aur.archlinux.org/pamac-aur.git
+cd pamac-aur
+makepkg -si
+cd
+
+#clean files
+rm -r .pac
+rm -r pamac-aur
 
 # Update after enabling multilib and other pacman.conf options
 pacman -Syu
@@ -128,6 +158,26 @@ fi
 git clone https://aur.archlinux.org/pikaur.git
 cd pikaur
 makepkg -fsri
+
+# A *LOT* of chown-ing
+chown $user /home/$user/Downloads
+chown $user /home/$user/Documents
+chown $user /home/$user/Pictures
+chown $user /home/$user/Pictures/wallpapers/*
+chown $user /home/$user/Videos
+chown $user /home/$user/.config/dwm
+chown $user /home/$user/.config/dwm/*
+chown $user /home/$user/.config/st
+chown $user /home/$user/.config/st/*
+chown $user /home/$user/.config/alacritty
+chown $user /home/$user/.config/alacritty/*
+chown $user /home/$user/.config/sxhkd
+chown $user /home/$user/.config/sxhkd/*
+chown $user /home/$user/.config/picom
+chown $user /home/$user/.config/picom/*
+chown $user /home/$user/.config
+chown $user /home/$user/.config/*
+chown $user /home/$user/.xinitrc
 
 printf '\033c'
 echo "Installation Complete! Rebooting: (Press return): "
