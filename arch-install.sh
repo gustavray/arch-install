@@ -39,6 +39,7 @@ read partition
 mkfs.ext4 $partition
 
 # Mount root partition to /mnt
+mount $efipartition /mnt/efi
 mount $partition /mnt
 
 # Pacstrap the needed packages
@@ -108,11 +109,12 @@ pacman -S --noconfirm sudo
 passwd
 # Create user account
 echo "Enter name of sudo user: "
-read $user
+read user
 useradd -m $user
-usermod -aG wheel,audio,video,storage $user
 # Set user passwordwheel,audio,video,storage 
 passwd $user
+usermod -aG wheel,audio,video,storage $user
+
 # Configure sudo
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 echo "%sudo ALL=(ALL) ALL" >> /etc/sudoers
@@ -144,8 +146,6 @@ then
     pacman -S --noconfirm --needed nvidia nvidia-utils nvidia-settings vulkan-icd-loader 
 fi
 
-pacman -Syu
-
 # Install a few multilib programs
 #######pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation
 
@@ -163,7 +163,8 @@ pacman -S --noconfirm grub efibootmgr os-prober
 mkdir /boot/efi
 mount $efipartition /boot/efi
 grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
-os-prober
+sudo os-prober
+
 grub-mkconfig -o /boot/grub/grub.cfg
 
 #printf '\033c'
