@@ -133,18 +133,21 @@ mkdir /.pac
 gitclone https://github.com/gustavray/pacconf ./.pac
 cp -r ./.pac/pacman.conf /etc/
 
+# Update after enabling multilib and other pacman.conf options
+pacman -Syu
+
 #Install Pamac
 git clone https://aur.archlinux.org/pamac-aur.git
 cd pamac-aur
 makepkg -si
 cd
 
+# Update after enabling multilib and other pacman.conf options
+pacman -Syu
+
 #clean files
 rm -r .pac
 rm -r pamac-aur
-
-# Update after enabling multilib and other pacman.conf options
-pacman -Syu
 
 read -p "Install Nvidia drivers? " -n 1 -r
 echo    # (optional) move to a new line
@@ -154,30 +157,22 @@ then
     pacman -S --noconfirm --needed nvidia nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader
 fi
 
+# Install a few multilib programs
+pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation
+
+#optional multilibs
+read -p "Would you like to install optional multilib programs? This includes VS Code, calibre and other programs " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    # Install optional multilib programs
+    pacman -S --noconfirm code calibre lutris notepadqq minecraft-launcher obs-studio krita
+fi
+
 #Install pikaur
 git clone https://aur.archlinux.org/pikaur.git
 cd pikaur
 makepkg -fsri
-
-# A *LOT* of chown-ing
-chown $user /home/$user/Downloads
-chown $user /home/$user/Documents
-chown $user /home/$user/Pictures
-chown $user /home/$user/Pictures/wallpapers/*
-chown $user /home/$user/Videos
-chown $user /home/$user/.config/dwm
-chown $user /home/$user/.config/dwm/*
-chown $user /home/$user/.config/st
-chown $user /home/$user/.config/st/*
-chown $user /home/$user/.config/alacritty
-chown $user /home/$user/.config/alacritty/*
-chown $user /home/$user/.config/sxhkd
-chown $user /home/$user/.config/sxhkd/*
-chown $user /home/$user/.config/picom
-chown $user /home/$user/.config/picom/*
-chown $user /home/$user/.config
-chown $user /home/$user/.config/*
-chown $user /home/$user/.xinitrc
 
 printf '\033c'
 echo "Installation Complete! Rebooting: (Press return): "
