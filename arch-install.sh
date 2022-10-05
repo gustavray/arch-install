@@ -97,6 +97,9 @@ echo "127.0.0.1		localhost" >> /etc/hosts
 echo "::1		localhost" >> /etc/hosts
 echo "127.0.1.1		$hostname.localdomain	$hostname >> /etc/hosts"
 
+#install sudo
+pacman --noconfirm -S sudo
+
 # Change root password
 passwd
 # Create user account
@@ -108,6 +111,17 @@ passwd $user
 # Configure sudo
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 echo "%sudo ALL=(ALL) ALL" >> /etc/sudoers
+
+
+# Updating pacman.conf to include multilib
+pacman -S git
+rm -rf /etc/pacman.conf
+mkdir /.pac
+gitclone https://github.com/gustavray/pacconf ./.pac
+cp -r ./.pac/pacman.conf /etc/
+
+# Update after enabling multilib and other pacman.conf options
+pacman -Syu
 
 # GRUB
 pacman --noconfirm -S grub efibootmgr
@@ -126,28 +140,6 @@ pacman -S --noconfirm vim neofetch htop xorg xorg-xinit firefox xclip libreoffic
 
 systemctl enable sddm.service
 systemctl enable NetworkManager.service
-
-# Updating pacman.conf to include multilib
-rm -rf /etc/pacman.conf
-mkdir /.pac
-gitclone https://github.com/gustavray/pacconf ./.pac
-cp -r ./.pac/pacman.conf /etc/
-
-# Update after enabling multilib and other pacman.conf options
-pacman -Syu
-
-#Install Pamac
-git clone https://aur.archlinux.org/pamac-aur.git
-cd pamac-aur
-makepkg -si
-cd
-
-# Update after enabling multilib and other pacman.conf options
-pacman -Syu
-
-#clean files
-rm -r .pac
-rm -r pamac-aur
 
 read -p "Install Nvidia drivers? " -n 1 -r
 echo    # (optional) move to a new line
@@ -177,5 +169,8 @@ makepkg -fsri
 printf '\033c'
 echo "Installation Complete! Rebooting: (Press return): "
 read $aaa
+
+sleep 2s
+exit
 
 systemctl reboot
