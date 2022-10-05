@@ -22,14 +22,14 @@ timedatectl set-ntp true
 
 # Select drive to partition
 lsblk
-echo "Enter the drive you wish to partition: "
+echo "Enter the drive you wish to partition(root, bot, EFI and swap): "
 read drive
 cfdisk $drive
 
 # Select partitions to format
 
 # Root/Linux partition
-echo "Enter the root partiton/Linux filesystem: "
+echo "Enter the /dev path of root partiton/Linux filesystem: "
 read partition
 mkfs.ext4 $partition
 
@@ -41,6 +41,11 @@ mkfs.xfs $bootpartition
 echo "Enter the /dev path of EFI partition: "
 read efipartition
 mkfs.fat -F32 $efipartition
+
+echo "Enter the /dev path of swap partition: "
+read swappartition
+mkswap $swappartition
+
 
 # Mount root partition to /mnt
 mount $partition /mnt
@@ -108,6 +113,7 @@ useradd -mG sudo,wheel,audio,video $user
 passwd $user
 # Configure sudo
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
+echo "%sudo ALL=(ALL) ALL" >> /etc/sudoers
 
 # GRUB
 pacman --noconfirm -S grub efibootmgr
