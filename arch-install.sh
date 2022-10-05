@@ -43,9 +43,9 @@ mount $partition /mnt
 mount $efipartition /mnt/boot/efi
 
 # Pacstrap the needed packages
-pacstrap /mnt base base-devel linux-zen linux-firmware
+pacstrap /mnt base base-devel linux-zen linux-firmware vim nano
 # Generate an /etc/fstab and append it to /mnt/etc/fstab
-genfstab -U /mnt > /mnt/etc/fstab
+genfstab -U /mnt >> /mnt/etc/fstab
 ####################################################################################
 # Chrooting
 arch-chroot /mnt
@@ -151,7 +151,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install NVIDIA drivers
-    pacman -S --noconfirm --needed nvidia nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader
+    pacman -S --noconfirm --needed nvidia nvidia-utils nvidia-settings vulkan-icd-loader 
 fi
 
 # Install a few multilib programs
