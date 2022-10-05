@@ -41,7 +41,7 @@ mkfs.ext4 $partition
 # Mount root partition to /mnt
 mount $partition /mnt
 mkdir /boot/efi
-mount $efipartition /mnt/efi
+mount $efipartition /mnt/boot/efi
 
 
 # Pacstrap the needed packages
@@ -162,7 +162,7 @@ fi
 
 # GRUB
 pacman -S --noconfirm grub efibootmgr os-prober
-mount $efipartition /boot/efi
+mount $efipartition /mnt/boot/efi
 grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
 sudo os-prober
 
