@@ -62,6 +62,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install Intel microcode
     pacman -S --noconfirm intel-ucode dhcpcd iwd
+else
+    # Install AMD microcode
+    pacman -S --noconfirm amd-ucode dhcpcd iwd
 fi
 
 read -p "AMD CPU? " -n 1 -r
@@ -125,12 +128,11 @@ cp ./.pac/pacman.conf /etc/
 # Update after enabling multilib and other pacman.conf options
 pacman -Syu
 
+pacman -S --noconfirm vim neofetch htop xorg xorg-xinit firefox xclip pipewire pipewire-alsa pipewire-pulse pavucontrol plasma plasma-wayland-session 
+
 # Enable dhcpcd.service
 systemctl enable dhcpcd.service
 systemctl enable iwd.service
-
-pacman -S --noconfirm vim neofetch htop xorg xorg-xinit firefox xclip pipewire pipewire-alsa pipewire-pulse pavucontrol plasma plasma-wayland-session 
-
 systemctl enable sddm.service
 systemctl enable NetworkManager.service
 
@@ -145,7 +147,7 @@ fi
 pacman -Syu
 
 # Install a few multilib programs
-pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation
+#######pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation
 
 #optional multilibs
 read -p "Would you like to install optional multilib programs? This includes VS Code, calibre and other programs " -n 1 -r
@@ -157,10 +159,11 @@ then
 fi
 
 # GRUB
-pacman -S --noconfirm grub efibootmgr
+pacman -S --noconfirm grub efibootmgr os-prober
 mkdir /boot/efi
 mount $efipartition /boot/efi
 grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
+os-prober
 grub-mkconfig -o /boot/grub/grub.cfg
 
 #printf '\033c'
