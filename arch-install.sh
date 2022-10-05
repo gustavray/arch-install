@@ -40,7 +40,6 @@ mkfs.ext4 $partition
 
 # Mount root partition to /mnt
 mount $partition /mnt
-mount $efipartition /mnt/boot/efi
 
 # Pacstrap the needed packages
 pacstrap /mnt base base-devel linux-zen linux-firmware vim nano
@@ -98,14 +97,14 @@ echo "::1		localhost" >> /etc/hosts
 echo "127.0.1.1		$hostname.localdomain	$hostname >> /etc/hosts"
 
 #install sudo
-pacman --noconfirm -S sudo
+pacman -S --noconfirm sudo
 
 # Change root password
 passwd
 # Create user account
 echo "Enter name of sudo user: "
 read $user
-useradd -mG sudo,wheel,audio,video $user
+useradd -mG wheel,audio,video,storage $user
 # Set user password
 passwd $user
 # Configure sudo
@@ -114,22 +113,22 @@ echo "%sudo ALL=(ALL) ALL" >> /etc/sudoers
 
 
 # Updating pacman.conf to include multilib
-pacman -S git
+pacman -S --noconfirm git
 rm -rf /etc/pacman.conf
-mkdir /.pac
+mkdir /.pacm
 git clone https://github.com/gustavray/pacconf ./.pac
-cp -r ./.pac/pacman.conf /etc/
+git clone https://github.com/gustavray/pacconf /etc/
+cp ./.pac/pacman.conf /etc/
 
 # Update after enabling multilib and other pacman.conf options
 pacman -Syu
 
 # GRUB
-pacman --noconfirm -S grub efibootmgr
+pacman -S --noconfirm grub efibootmgr
 
-lsblk
-#echo "Enter EFI partition: "
-#read efipartition
-grub-install --target=x86_64-efi --efi-dir=/efi --bootloader-id=GRUB
+mkdir /boot/efi
+mount $efipartition /boot/efi
+grub-install --target=x86_64-efi --efi-dir=/efi --bootloader-id=ArchLinux
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Enable dhcpcd.service
@@ -141,13 +140,15 @@ pacman -S --noconfirm vim neofetch htop xorg xorg-xinit firefox xclip libreoffic
 systemctl enable sddm.service
 systemctl enable NetworkManager.service
 
-read -p "Install Nvidia drivers? " -n 1 -r
+read -p "Install Nvidia drivers? y/n " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install NVIDIA drivers
     pacman -S --noconfirm --needed nvidia nvidia-utils nvidia-settings vulkan-icd-loader 
 fi
+
+pacman -Syu
 
 # Install a few multilib programs
 pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation
@@ -160,11 +161,6 @@ then
     # Install optional multilib programs
     pacman -S --noconfirm code calibre lutris notepadqq minecraft-launcher obs-studio krita
 fi
-
-#Install pikaur
-git clone https://aur.archlinux.org/pikaur.git
-cd pikaur
-makepkg -fsri
 
 #printf '\033c'
 #echo "Installation Complete! Rebooting: (Press return): "
