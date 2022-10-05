@@ -40,8 +40,6 @@ mkfs.ext4 $partition
 
 # Mount root partition to /mnt
 mount $partition /mnt
-mkdir /mnt/boot/efi
-mount $efipartition /mnt/boot/efi
 
 
 # Pacstrap the needed packages
@@ -70,14 +68,6 @@ else
     pacman -S --noconfirm amd-ucode dhcpcd iwd
 fi
 
-read -p "AMD CPU? " -n 1 -r
-echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    # Install AMD microcode
-    pacman -S --noconfirm amd-ucode dhcpcd iwd
-fi
-
 # Change ParallelDownloads from 5 to 15
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 
@@ -87,6 +77,7 @@ read $timezone
 timedatectl set-timezone $timezone
 ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
 # Sync hardware clock with Arch Linux
+hwclock --systohc
 
 # Set locale
 echo "pt_BR.UTF-8 UTF-8" >> /etc/locale.gen
@@ -116,10 +107,19 @@ useradd -m $user
 # Set user passwordwheel,audio,video,storage 
 passwd $user
 usermod -aG wheel,audio,video,storage $user
-
 # Configure sudo
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
-echo "%sudo ALL=(ALL) ALL" >> /etc/sudoers
+
+# GRUB
+pacman -S --noconfirm grub efibootmgr os-prober
+lsblk
+echo "Enter the /dev path of EFI partition again: "
+read efipartition
+mkdir /boot/efi
+mount $efipartition /boot/efi
+grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
+sudo os-prober
+grub-mkconfig -o /boot/grub/grub.cfg
 
 # Updating pacman.conf to include multilib
 pacman -S --noconfirm git
@@ -149,7 +149,7 @@ then
 fi
 
 # Install a few multilib programs
-#######pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation
+pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation
 
 #optional multilibs
 read -p "Would you like to install optional multilib programs? This includes VS Code, calibre and other programs " -n 1 -r
@@ -160,19 +160,12 @@ then
     pacman -S --noconfirm code calibre lutris notepadqq minecraft-launcher obs-studio krita
 fi
 
-# GRUB
-pacman -S --noconfirm grub efibootmgr os-prober
-mount $efipartition /mnt/boot/efi
-grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
-sudo os-prober
-
-grub-mkconfig -o /boot/grub/grub.cfg
 
 #printf '\033c'
-#echo "Installation Complete! Rebooting: (Press return): "
-#read $aaa
+echo "Installation Complete! Rebooting: (Press return): "
+read $aaa
 
-#sleep 2s
-#exit
+sleep 2s
+exit
 
-#systemctl reboot
+systemctl reboot
