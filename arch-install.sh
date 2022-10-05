@@ -106,19 +106,12 @@ passwd
 # Create user account
 echo "Enter name of sudo user: "
 read $user
-useradd -m wheel,audio,video,storage $user
+useradd -mG wheel,audio,video,storage $user
 # Set user password
 passwd $user
 # Configure sudo
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 echo "%sudo ALL=(ALL) ALL" >> /etc/sudoers
-
-# GRUB
-pacman -S --noconfirm grub efibootmgr
-mkdir /boot/efi
-mount $efipartition /boot/efi
-grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
-grub-mkconfig -o /boot/grub/grub.cfg
 
 # Updating pacman.conf to include multilib
 pacman -S --noconfirm git
@@ -135,7 +128,7 @@ pacman -Syu
 systemctl enable dhcpcd.service
 systemctl enable iwd.service
 
-pacman -S --noconfirm vim neofetch htop xorg xorg-xinit firefox xclip libreoffice-fresh pipewire pipewire-alsa pipewire-pulse pavucontrol plasma plasma-wayland-session 
+pacman -S --noconfirm vim neofetch htop xorg xorg-xinit firefox xclip pipewire pipewire-alsa pipewire-pulse pavucontrol plasma plasma-wayland-session 
 
 systemctl enable sddm.service
 systemctl enable NetworkManager.service
@@ -161,6 +154,13 @@ then
     # Install optional multilib programs
     pacman -S --noconfirm code calibre lutris notepadqq minecraft-launcher obs-studio krita
 fi
+
+# GRUB
+pacman -S --noconfirm grub efibootmgr
+mkdir /boot/efi
+mount $efipartition /boot/efi
+grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
+grub-mkconfig -o /boot/grub/grub.cfg
 
 #printf '\033c'
 #echo "Installation Complete! Rebooting: (Press return): "
