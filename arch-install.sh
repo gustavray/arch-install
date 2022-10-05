@@ -40,7 +40,7 @@ mkfs.ext4 $partition
 
 # Mount root partition to /mnt
 mount $partition /mnt
-mkdir /boot/efi
+mkdir /mnt/boot/efi
 mount $efipartition /mnt/boot/efi
 
 
