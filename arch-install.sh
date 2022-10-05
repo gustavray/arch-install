@@ -28,29 +28,20 @@ cfdisk $drive
 
 # Select partitions to format
 
-# Root/Linux partition
-echo "Enter the /dev path of root partiton/Linux filesystem: "
-read partition
-mkfs.ext4 $partition
-
-echo "Enter the /dev path of boot partition: "
-read bootpartition
-mkfs.xfs $bootpartition
-
 # Boot partition
 echo "Enter the /dev path of EFI partition: "
 read efipartition
 mkfs.fat -F32 $efipartition
 
-echo "Enter the /dev path of swap partition: "
-read swappartition
-mkswap $swappartition
-
+# Root/Linux partition
+echo "Enter the /dev path of root partiton/Linux filesystem: "
+read partition
+mkfs.ext4 $partition
 
 # Mount root partition to /mnt
 mount $partition /mnt
-mount $bootpartition /mnt/boot
-mount $efipartition /mnt/efi
+mount $efipartition /mnt/boot/efi
+
 # Pacstrap the needed packages
 pacstrap /mnt base base-devel linux-zen linux-firmware
 # Generate an /etc/fstab and append it to /mnt/etc/fstab
