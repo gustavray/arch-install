@@ -52,6 +52,9 @@ arch-chroot /mnt ./arch-install2.sh
 
 #part2
 
+#updating
+pacman -Syu
+
 # Install Intel Microcode
 read -p "Intel CPU? " -n 1 -r
 echo    # (optional) move to a new line
@@ -78,7 +81,6 @@ read $timezone
 timedatectl set-timezone $timezone
 ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
 # Sync hardware clock with Arch Linux
-hwclock -lw
 
 # Set locale
 echo "pt_BR.UTF-8 UTF-8" >> /etc/locale.gen
@@ -104,13 +106,19 @@ passwd
 # Create user account
 echo "Enter name of sudo user: "
 read $user
-useradd -mG wheel,audio,video,storage $user
+useradd -m wheel,audio,video,storage $user
 # Set user password
 passwd $user
 # Configure sudo
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 echo "%sudo ALL=(ALL) ALL" >> /etc/sudoers
 
+# GRUB
+pacman -S --noconfirm grub efibootmgr
+mkdir /boot/efi
+mount $efipartition /boot/efi
+grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
+grub-mkconfig -o /boot/grub/grub.cfg
 
 # Updating pacman.conf to include multilib
 pacman -S --noconfirm git
@@ -122,14 +130,6 @@ cp ./.pac/pacman.conf /etc/
 
 # Update after enabling multilib and other pacman.conf options
 pacman -Syu
-
-# GRUB
-pacman -S --noconfirm grub efibootmgr
-
-mkdir /boot/efi
-mount $efipartition /boot/efi
-grub-install --target=x86_64-efi --efi-dir=/efi --bootloader-id=ArchLinux
-grub-mkconfig -o /boot/grub/grub.cfg
 
 # Enable dhcpcd.service
 systemctl enable dhcpcd.service
