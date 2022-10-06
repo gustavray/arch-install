@@ -139,7 +139,7 @@ cp ./.pac/pacman.conf /etc/
 # Update after enabling multilib and other pacman.conf options
 pacman -Syu
 
-pacman -S --noconfirm vim neofetch xorg xorg-xinit firefox git pipewire pipewire-alsa pipewire-pulse pavucontrol git dmenu vlc ttf-cascadia-code picom plasma plasma-wayland-session kde-application linux-zen-headers
+pacman -S --noconfirm vim neofetch xorg xorg-xinit firefox git pipewire pipewire-alsa pipewire-pulse pavucontrol git dmenu vlc ttf-cascadia-code picom plasma plasma-wayland-session kde-applications
 
 # Enable dhcpcd.service
 systemctl enable dhcpcd.service
