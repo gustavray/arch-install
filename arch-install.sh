@@ -72,7 +72,7 @@ then
     pacman -S --noconfirm intel-ucode dhcpcd iwd
 else
     # Install AMD microcode
-    pacman -S --noconfirm amd-ucode dhcpcd iwd
+    pacman -S --noconfirm amd-ucode dhcpcd iwd linuz-zen-headers
 fi
 
 # Change ParallelDownloads from 5 to 15
@@ -163,7 +163,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install NVIDIA drivers
-    pacman -S --noconfirm --needed nvidia nvidia-utils nvidia-settings vulkan-icd-loader 
+    pacman -S --noconfirm --needed nvidia-dkms #nvidia-utils nvidia-settings vulkan-icd-loader 
 fi
 
 # Install a few multilib programs
