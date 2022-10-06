@@ -158,13 +158,14 @@ systemctl enable NetworkManager.service
 # rm -rf /home/$user/Pictures/wallpapers/README.md
 ################################################################################################
 
-read -p "Install Nvidia drivers? y/n " -n 1 -r
-echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+############ Due to issues with the current version of the driver, this is commented so you may manually install an older version of the drivers 
+#read -p "Install Nvidia drivers? y/n " -n 1 -r
+#echo    # (optional) move to a new line
+#if [[ $REPLY =~ ^[Yy]$ ]]
+#then
     # Install NVIDIA drivers
-    pacman -S --noconfirm --needed nvidia-dkms #nvidia-utils nvidia-settings vulkan-icd-loader 
-fi
+  #  pacman -S --noconfirm --needed nvidia-dkms #nvidia-utils nvidia-settings vulkan-icd-loader 
+#fi
 
 # Install a few multilib programs
 echo "Would you like to install Discord, Steam and fonts? [y/n] "
