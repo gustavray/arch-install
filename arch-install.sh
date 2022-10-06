@@ -53,9 +53,6 @@ arch-chroot /mnt ./arch-install2.sh
 
 #part2
 
-
-
-
 # Install Intel Microcode
 read -p "Intel CPU? " -n 1 -r
 echo    # (optional) move to a new line
