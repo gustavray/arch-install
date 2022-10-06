@@ -124,7 +124,7 @@ echo "Enter EFI partition again: "
 read efipartition
 mkdir /boot/efi
 mount $efipartition /boot/efi
-grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
+grub-install --target=x86_64-efi --bootloader-id=Arch Linux --efi-directory=/boot/efi
 os-prober
 grub-mkconfig -o /boot/grub/grub.cfg
 
@@ -139,7 +139,7 @@ cp ./.pac/pacman.conf /etc/
 # Update after enabling multilib and other pacman.conf options
 pacman -Syu
 
-pacman -S --noconfirm vim neofetch xorg xorg-xinit firefox git pipewire pipewire-alsa pipewire-pulse pavucontrol git dmenu vlc ttf-cascadia-code picom plasma plasma-wayland-session kde-applications
+pacman -S --noconfirm vim neofetch xorg xorg-xinit firefox git pipewire pipewire-alsa pipewire-pulse pavucontrol git dmenu vlc ttf-cascadia-code picom plasma plasma-wayland-session kde-application linux-zen-headers
 
 # Enable dhcpcd.service
 systemctl enable dhcpcd.service
