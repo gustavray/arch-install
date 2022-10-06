@@ -7,9 +7,9 @@
 # Be sure to run as root.
 
 #part1
-clear
+#clear
 
-echo "Welcome to Gus' Arch installer."
+echo "Welcome to Haruki's Arch installer."
 
 # Change ParallelDownloads from "5" to "10"
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
@@ -19,6 +19,7 @@ pacman --noconfirm -Sy archlinux-keyring
 loadkeys us
 # Fix date and time
 timedatectl set-ntp true
+timedatectl set-local-rtc 1
 
 # Select drive to partition
 lsblk
@@ -29,11 +30,13 @@ cfdisk $drive
 # Select partitions to format
 
 # Boot partition
+lsblk
 echo "Enter the /dev path of EFI partition: "
 read efipartition
 mkfs.fat -F32 $efipartition
 
 # Root/Linux partition
+lsblk
 echo "Enter the /dev path of root partiton/Linux filesystem: "
 read partition
 mkfs.ext4 $partition
@@ -54,7 +57,7 @@ arch-chroot /mnt ./arch-install2.sh
 exit
 
 #part2
-clear
+#clear
 
 # Update Pacman 
 pacman -Syu
@@ -81,7 +84,6 @@ timedatectl set-timezone $timezone
 ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
 # Sync hardware clock with Arch Linux
 hwclock --systohc
-timedatectl set-local-rtc 1
 
 # Set locale
 echo "pt_BR.UTF-8 UTF-8" >> /etc/locale.gen
@@ -105,7 +107,7 @@ pacman -S --noconfirm sudo
 # Change root password
 passwd
 # Create user account
-echo "Enter desired username: "
+echo "Enter desired username(lowercase letters only: "
 read user
 useradd -m $user
 # Set user passwordwheel,audio,video,storage 
@@ -137,7 +139,7 @@ cp ./.pac/pacman.conf /etc/
 # Update after enabling multilib and other pacman.conf options
 pacman -Syu
 
-pacman -S --noconfirm vim neofetch xorg xorg-xinit firefox git pipewire pipewire-alsa pipewire-pulse pavucontrol git dmenu vlc ttf-cascadia-code picom plasma plasma-wayland-session 
+pacman -S --noconfirm vim neofetch xorg xorg-xinit firefox git pipewire pipewire-alsa pipewire-pulse pavucontrol git dmenu vlc ttf-cascadia-code picom plasma plasma-wayland-session kde-applications
 
 # Enable dhcpcd.service
 systemctl enable dhcpcd.service
@@ -147,11 +149,14 @@ systemctl enable NetworkManager.service
 
 #part3
 
+################################################################################################
+# Reserved for future wallpapers
 # Wallpapers
-git clone https://github.com/CalvinKev/wallpapers.git /home/$username/Pictures/wallpapers
-rm -rf /home/$user/Pictures/wallpapers/.git
-rm -rf /home/$user/Pictures/wallpapers/LICENSE
-rm -rf /home/$user/Pictures/wallpapers/README.md
+# git clone https://github.com/CalvinKev/wallpapers.git /home/$username/Pictures/wallpapers
+# rm -rf /home/$user/Pictures/wallpapers/.git
+# rm -rf /home/$user/Pictures/wallpapers/LICENSE
+# rm -rf /home/$user/Pictures/wallpapers/README.md
+################################################################################################
 
 read -p "Install Nvidia drivers? y/n " -n 1 -r
 echo    # (optional) move to a new line
@@ -169,15 +174,20 @@ if [[ $answer1 = y ]] ; then
 fi
 
 #optional multilibs
-read -p "Would you like to install optional multilib programs? This includes VS Code, calibre and other programs " -n 1 -r
+read -p "Would you like to install optional multilib programs? This includes VS Code, Calibre, OBS Studio, LibreOffice and other programs " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install optional multilib programs
-    pacman -S --noconfirm code calibre lutris notepadqq minecraft-launcher obs-studio krita
+    pacman -S --noconfirm code calibre lutris notepadqq obs-studio krita grub-customizer
 fi
 
-
+read -p "Install Libre Office? "
+echo # to move a line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    # Install LIbreOffice
+    pacman -S --noconfirm libreoffice-fresh
 #clear
 echo "Installation Complete! Rebooting: (Press return): "
 read $aaa
