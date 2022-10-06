@@ -53,8 +53,8 @@ arch-chroot /mnt ./arch-install2.sh
 
 #part2
 
-#updating
-pacman -Syu
+
+
 
 # Install Intel Microcode
 read -p "Intel CPU? " -n 1 -r
@@ -94,6 +94,9 @@ echo $hostname > /etc/hostname
 echo "127.0.0.1		localhost" >> /etc/hosts
 echo "::1		localhost" >> /etc/hosts
 echo "127.0.1.1		$hostname.localdomain	$hostname >> /etc/hosts"
+
+#update 
+pacman -Syu
 
 #install sudo
 pacman -S --noconfirm sudo
