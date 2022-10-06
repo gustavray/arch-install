@@ -7,7 +7,7 @@
 # Be sure to run as root.
 
 #part1
-#clear
+clear
 
 echo "Welcome to Haruki's Arch installer."
 
@@ -57,10 +57,11 @@ arch-chroot /mnt ./arch-install2.sh
 exit
 
 #part2
-#clear
 
 # Update Pacman 
 pacman -Syu
+
+clear
 
 # Install Intel/AMD Microcode
 read -p "Intel CPU? " -n 1 -r
@@ -118,7 +119,6 @@ echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
 # GRUB
 pacman -S --noconfirm grub efibootmgr os-prober
-
 lsblk
 echo "Enter EFI partition again: "
 read efipartition
@@ -188,11 +188,12 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install LIbreOffice
     pacman -S --noconfirm libreoffice-fresh
-#clear
-echo "Installation Complete! Rebooting: (Press return): "
+fi
+
+clear
+echo "Installation Complete! Rebooting: (Press return) and enter "systemctl reboot" or "reboot now" on the next screen: "
 read $aaa
 
 sleep 2s
+clear
 exit
-
-systemctl reboot
