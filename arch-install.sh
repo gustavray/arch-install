@@ -7,9 +7,9 @@
 # Be sure to run as root.
 
 #part1
-printf '\033c'
+clear
 
-echo "Welcome to fr000gs Arch installer."
+echo "Welcome to Gus' Arch installer."
 
 # Change ParallelDownloads from "5" to "10"
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
@@ -22,7 +22,7 @@ timedatectl set-ntp true
 
 # Select drive to partition
 lsblk
-echo "Enter the drive you wish to partition(root, bot, EFI and swap): "
+echo "Enter the drive you wish to partition: "
 read drive
 cfdisk $drive
 
@@ -39,21 +39,27 @@ read partition
 mkfs.ext4 $partition
 
 # Mount root partition to /mnt
+lsblk
 mount $partition /mnt
-
 
 # Pacstrap the needed packages
 pacstrap /mnt base base-devel linux-zen linux-firmware vim nano
 # Generate an /etc/fstab and append it to /mnt/etc/fstab
 genfstab -U /mnt >> /mnt/etc/fstab
+# Create new sh file for arch-chroot
 sed '1,/^#part2$/d' `basename $0` > /mnt/arch-install2.sh
 #mv /home/arch-install2.sh /mnt
 chmod +x /mnt/arch-install2.sh
 arch-chroot /mnt ./arch-install2.sh
+exit
 
 #part2
+clear
 
-# Install Intel Microcode
+# Update Pacman 
+pacman -Syu
+
+# Install Intel/AMD Microcode
 read -p "Intel CPU? " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -75,6 +81,7 @@ timedatectl set-timezone $timezone
 ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
 # Sync hardware clock with Arch Linux
 hwclock --systohc
+timedatectl set-local-rtc 1
 
 # Set locale
 echo "pt_BR.UTF-8 UTF-8" >> /etc/locale.gen
@@ -92,16 +99,13 @@ echo "127.0.0.1		localhost" >> /etc/hosts
 echo "::1		localhost" >> /etc/hosts
 echo "127.0.1.1		$hostname.localdomain	$hostname >> /etc/hosts"
 
-#update 
-pacman -Syu
-
-#install sudo
+# Install sudo
 pacman -S --noconfirm sudo
 
 # Change root password
 passwd
 # Create user account
-echo "Enter name of sudo user: "
+echo "Enter desired username: "
 read user
 useradd -m $user
 # Set user passwordwheel,audio,video,storage 
@@ -112,16 +116,17 @@ echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
 # GRUB
 pacman -S --noconfirm grub efibootmgr os-prober
+
 lsblk
-echo "Enter the /dev path of EFI partition again: "
+echo "Enter EFI partition again: "
 read efipartition
 mkdir /boot/efi
 mount $efipartition /boot/efi
 grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
-sudo os-prober
+os-prober
 grub-mkconfig -o /boot/grub/grub.cfg
 
-# Updating pacman.conf to include multilib
+# Install git for cloning config file
 pacman -S --noconfirm git
 rm -rf /etc/pacman.conf
 mkdir /.pacm
@@ -132,13 +137,21 @@ cp ./.pac/pacman.conf /etc/
 # Update after enabling multilib and other pacman.conf options
 pacman -Syu
 
-pacman -S --noconfirm vim neofetch htop xorg xorg-xinit firefox xclip pipewire pipewire-alsa pipewire-pulse pavucontrol plasma plasma-wayland-session 
+pacman -S --noconfirm vim neofetch xorg xorg-xinit firefox git pipewire pipewire-alsa pipewire-pulse pavucontrol git dmenu vlc ttf-cascadia-code picom plasma plasma-wayland-session 
 
 # Enable dhcpcd.service
 systemctl enable dhcpcd.service
 systemctl enable iwd.service
 systemctl enable sddm.service
 systemctl enable NetworkManager.service
+
+#part3
+
+# Wallpapers
+git clone https://github.com/CalvinKev/wallpapers.git /home/$username/Pictures/wallpapers
+rm -rf /home/$user/Pictures/wallpapers/.git
+rm -rf /home/$user/Pictures/wallpapers/LICENSE
+rm -rf /home/$user/Pictures/wallpapers/README.md
 
 read -p "Install Nvidia drivers? y/n " -n 1 -r
 echo    # (optional) move to a new line
@@ -149,7 +162,11 @@ then
 fi
 
 # Install a few multilib programs
-pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation
+echo "Would you like to install Discord, Steam and fonts? [y/n] "
+read answer1
+if [[ $answer1 = y ]] ; then
+    pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation
+fi
 
 #optional multilibs
 read -p "Would you like to install optional multilib programs? This includes VS Code, calibre and other programs " -n 1 -r
@@ -161,7 +178,7 @@ then
 fi
 
 
-#printf '\033c'
+#clear
 echo "Installation Complete! Rebooting: (Press return): "
 read $aaa
 
