@@ -72,7 +72,7 @@ then
     pacman -S --noconfirm intel-ucode dhcpcd iwd
 else
     # Install AMD microcode
-    pacman -S --noconfirm amd-ucode dhcpcd iwd linux-en-headers
+    pacman -S --noconfirm amd-ucode dhcpcd iwd linux-zen-headers
 fi
 
 # Change ParallelDownloads from 5 to 15
