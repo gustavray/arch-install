@@ -16,7 +16,7 @@ sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 # Update archlinux-keyring to avoid unnecessary errors
 pacman --noconfirm -Sy archlinux-keyring
 # Load US keyboard layout
-loadkeys us
+#loadkeys us (reserved as I don't use a US keyboard) 
 # Fix date and time
 timedatectl set-ntp true
 timedatectl set-local-rtc 1
@@ -86,11 +86,11 @@ ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
 hwclock --systohc
 
 # Set locale
-echo "pt_BR.UTF-8 UTF-8" >> /etc/locale.gen
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 # Generate locale
 locale-gen
 # Set locale.conf
-echo "LANG=pt_BR.UTF-8" > /etc/locale.conf
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
 # Set hostname
 echo "Hostname: "
 read hostname
