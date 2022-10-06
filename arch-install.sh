@@ -124,7 +124,7 @@ echo "Enter EFI partition again: "
 read efipartition
 mkdir /boot/efi
 mount $efipartition /boot/efi
-grub-install --target=x86_64-efi --bootloader-id=Arch Linux --efi-directory=/boot/efi
+grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
 os-prober
 grub-mkconfig -o /boot/grub/grub.cfg
 
