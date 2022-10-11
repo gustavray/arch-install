@@ -39,7 +39,7 @@ mkfs.fat -F32 $efipartition
 lsblk
 echo "Enter the /dev path of root partiton/Linux filesystem: "
 read partition
-mkfs.ext4 $partition
+mkfs.btrfs $partition
 
 # Mount root partition to /mnt
 lsblk
@@ -125,7 +125,7 @@ read efipartition
 mkdir /boot/efi
 mount $efipartition /boot/efi
 grub-install --target=x86_64-efi --bootloader-id=ArchLinux --efi-directory=/boot/efi
-os-prober
+sudo os-prober
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Install git for cloning config file
