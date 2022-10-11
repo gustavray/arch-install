@@ -139,12 +139,32 @@ cp ./.pac/pacman.conf /etc/
 # Update after enabling multilib and other pacman.conf options
 pacman -Syu
 
-pacman -S --noconfirm vim neofetch xorg xorg-xinit firefox git pipewire pipewire-alsa pipewire-pulse pavucontrol git dmenu vlc ttf-cascadia-code picom plasma plasma-wayland-session kde-applications
+pacman -S --noconfirm vim neofetch xorg xorg-server xorg-xinit firefox git pipewire pipewire-alsa pipewire-pulse pavucontrol git dmenu vlc ttf-cascadia-code picom 
+
+
+# DE installation 
+# GNOME
+read -p "Install GNOME? y/n " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    # Install Gnome and dependancies
+    pacman -S --noconfirm gnome sudo systemctl start gdm.service
+    systemctl enable gdm.service
+fi
+# KDE Plasma
+read -p "Install KDE? y/n " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    # Install Gnome and dependancies
+    pacman -S --noconfirm  kde-applications plasma plasma-wayland-session sddm
+    systemctl enable sddm.service
+fi
 
 # Enable dhcpcd.service
 systemctl enable dhcpcd.service
 systemctl enable iwd.service
-systemctl enable sddm.service
 systemctl enable NetworkManager.service
 
 #part3
@@ -158,14 +178,14 @@ systemctl enable NetworkManager.service
 # rm -rf /home/$user/Pictures/wallpapers/README.md
 ################################################################################################
 
-############ Due to issues with the current version of the driver, this is commented so you may manually install an older version of the drivers 
-#read -p "Install Nvidia drivers? y/n " -n 1 -r
-#echo    # (optional) move to a new line
-#if [[ $REPLY =~ ^[Yy]$ ]]
-#then
+# Nvidia Driver installation 
+read -p "Install Nvidia drivers? y/n " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
     # Install NVIDIA drivers
-  #  pacman -S --noconfirm --needed nvidia-dkms #nvidia-utils nvidia-settings vulkan-icd-loader 
-#fi
+    pacman -S --noconfirm --needed nvidia-dkms #nvidia-utils nvidia-settings vulkan-icd-loader 
+fi
 
 # Install a few multilib programs
 echo "Would you like to install Discord, Steam and fonts? [y/n] "
