@@ -149,7 +149,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install Gnome and dependancies
-    pacman -S --noconfirm gnome sudo systemctl start gdm.service
+    pacman -S --noconfirm gnome
     systemctl enable gdm.service
 fi
 # KDE Plasma
