@@ -64,7 +64,7 @@ pacman -Syu
 clear
 
 # Install Intel/AMD Microcode
-read -p "Intel CPU? " -n 1 -r
+read -p "Intel CPU? (y/N) " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -106,6 +106,7 @@ echo "127.0.1.1		$hostname.localdomain	$hostname >> /etc/hosts"
 pacman -S --noconfirm sudo
 
 # Change root password
+echo "Set root password: "
 passwd
 # Create user account
 echo "Enter desired username(lowercase letters only: "
@@ -144,14 +145,14 @@ pacman -S --noconfirm vim neofetch xorg xorg-server xorg-xinit firefox git pipew
 
 # DE installation 
 # GNOME
-read -p "Install GNOME? y/n " -n 1 -r
-echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    # Install Gnome and dependancies
-    pacman -S --noconfirm gnome
-    systemctl enable gdm.service
-fi
+# read -p "Install GNOME? y/n " -n 1 -r
+#echo    # (optional) move to a new line
+#if [[ $REPLY =~ ^[Yy]$ ]]
+#then
+#    # Install Gnome and dependancies
+#    pacman -S --noconfirm gnome
+#    systemctl enable gdm.service
+#fi
 # KDE Plasma
 read -p "Install KDE? y/n " -n 1 -r
 echo    # (optional) move to a new line
@@ -162,7 +163,7 @@ then
     systemctl enable sddm.service
 fi
 
-# Enable dhcpcd.service
+# Enable essential services
 systemctl enable dhcpcd.service
 systemctl enable iwd.service
 systemctl enable NetworkManager.service
@@ -195,7 +196,7 @@ if [[ $answer1 = y ]] ; then
 fi
 
 #optional multilibs
-read -p "Would you like to install optional multilib programs? This includes VS Code, Calibre, OBS Studio, LibreOffice and other programs " -n 1 -r
+read -p "Would you like to install optional multilib programs? This includes VS Code, Calibre, OBS Studio, Lutris, and other programs: (y/n) " -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -216,5 +217,5 @@ echo "Installation Complete! Rebooting: (Press return) and enter "systemctl rebo
 read $aaa
 
 sleep 2s
-clear
+#clear
 exit
