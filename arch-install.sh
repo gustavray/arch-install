@@ -145,14 +145,14 @@ pacman -S --noconfirm vim neofetch xorg xorg-server xorg-xinit firefox git pipew
 
 # DE installation 
 # GNOME
-# read -p "Install GNOME? y/n " -n 1 -r
-#echo    # (optional) move to a new line
-#if [[ $REPLY =~ ^[Yy]$ ]]
-#then
-#    # Install Gnome and dependancies
-#    pacman -S --noconfirm gnome
-#    systemctl enable gdm.service
-#fi
+read -p "Install GNOME? y/n " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    # Install Gnome and dependancies
+    pacman -S --noconfirm gnome
+    systemctl enable gdm.service
+fi
 # KDE Plasma
 read -p "Install KDE? y/n " -n 1 -r
 echo    # (optional) move to a new line
