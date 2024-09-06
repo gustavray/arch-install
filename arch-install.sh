@@ -150,7 +150,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install Gnome and dependancies
-    pacman -S --noconfirm gnome
+    pacman -S --noconfirm gnome-shell gdm network-manager-applet gnome-keyring gnome-backgrounds gnome-control-center networkmanager xdg-user-dirs xdg-users-dirs-gtk nautilus gnome-weather gnome-tweak-tool gnome-clocks zed kitty
     systemctl enable gdm.service
 fi
 # KDE Plasma
@@ -193,17 +193,17 @@ echo "Would you like to install Discord, Steam and fonts? [y/n] " -n 1 -r
 read answer1
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation
+    pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation flatpak calibre lutris grub-customizer
 fi
 
 #optional multilibs
-read -p "Would you like to install optional multilib programs? This includes VS Code, Calibre, OBS Studio, Lutris, and other programs: (y/n) " -n 1 -r
-echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+#read -p "Would you like to install optional multilib programs? This includes VS Code, Calibre, OBS Studio, Lutris, and other programs: (y/n) " -n 1 -r
+#echo    # (optional) move to a new line
+#if [[ $REPLY =~ ^[Yy]$ ]]
+#then
     # Install optional multilib programs
-    pacman -S --noconfirm calibre lutris notepadqq grub-customizer
-fi
+#    pacman -S --noconfirm 
+#fi
 
 read -p "Install Libre Office? " -n 1 -r
 echo # to move a line
@@ -212,6 +212,14 @@ then
     # Install LIbreOffice
     pacman -S --noconfirm libreoffice-fresh
 fi
+# Installs Yay (AUR Helper)
+#read -p "Install Yay (AUR Helper)?" -n 1 -r
+#echo #to move a line
+#if [[ $REPLY =~ ^[Yy]$ ]]
+#then
+    # Install Yay
+#    git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+#    yay --version
 
 clear
 echo "Installation Complete! Rebooting: (Press return) and enter "systemctl reboot" or "reboot now" on the next screen: "
