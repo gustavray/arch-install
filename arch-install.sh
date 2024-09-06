@@ -130,7 +130,7 @@ sudo os-prober
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Install git for cloning config file
-pacman -S --noconfirm git wget
+pacman -S --noconfirm git wget curl
 rm -rf /etc/pacman.conf
 mkdir /.pac
 git clone https://github.com/gustavray/pacconf ./.pac
@@ -193,7 +193,7 @@ echo "Would you like to install Discord, Steam and fonts? [y/n] " -n 1 -r
 read answer1
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation flatpak calibre lutris grub-customizer
+    pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation flatpak calibre lutris grub-customizer zsh
 fi
 
 #optional multilibs
