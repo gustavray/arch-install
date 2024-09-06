@@ -23,7 +23,7 @@ timedatectl set-local-rtc 1
 
 # Select drive to partition
 lsblk
-echo "Enter the drive you wish to partition: "
+echo "Enter the drive you wish to partition with the full path e.g '/dev/sda1': "
 read drive
 cfdisk $drive
 
@@ -31,13 +31,13 @@ cfdisk $drive
 
 # Boot partition
 lsblk
-echo "Enter the /dev path of EFI partition: "
+echo "Enter the full /dev path of EFI partition: "
 read efipartition
 mkfs.fat -F32 $efipartition
 
 # Root/Linux partition
 lsblk
-echo "Enter the /dev path of root partiton/Linux filesystem: "
+echo "Enter the full /dev path of root partiton/Linux filesystem: "
 read partition
 mkfs.btrfs -f $partition
 
@@ -79,9 +79,9 @@ fi
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 
 # Set timezone
-echo "Enter timezone (format Continent/City): "
-read $timezone
-timedatectl set-timezone $timezone
+#echo "Enter timezone (format Continent/City): "
+#read $timezone
+#timedatectl set-timezone $timezone
 ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
 # Sync hardware clock with Arch Linux
 hwclock --systohc
@@ -121,7 +121,7 @@ echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 # GRUB
 pacman -S --noconfirm grub efibootmgr os-prober bluez bluez-utils
 lsblk
-echo "Enter EFI partition again: "
+echo "Enter EFI partition again (full path): "
 read efipartition
 mkdir /boot/efi
 mount $efipartition /boot/efi
