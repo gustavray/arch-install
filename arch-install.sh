@@ -150,7 +150,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install Gnome and dependancies
-    pacman -S --noconfirm gnome-shell gdm network-manager-applet gnome-keyring gnome-backgrounds gnome-control-center networkmanager xdg-user-dirs xdg-users-dirs-gtk nautilus gnome-weather gnome-tweaks gnome-clocks zed kitty
+    pacman -S --noconfirm gnome-shell gdm network-manager-applet gnome-keyring gnome-backgrounds gnome-control-center networkmanager xdg-user-dirs nautilus gnome-weather gnome-tweaks gnome-clocks zed kitty
     systemctl enable gdm.service
 fi
 # KDE Plasma
@@ -186,12 +186,12 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install NVIDIA drivers
-    pacman -S --noconfirm --needed nvidia-dkms #nvidia-utils nvidia-settings vulkan-icd-loader 
+    pacman -S --noconfirm --needed nvidia-dkms nvidia-utils nvidia-settings vulkan-icd-loader 
 fi
 
 # Install a few multilib programs
-echo "Would you like to install Discord, Steam and fonts? [y/n] " -n 1 -r
-read answer1
+read -p "Would you like to install Discord, Steam and fonts? [y/n] " -n 1 -r
+echo #to move a line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation flatpak calibre lutris grub-customizer zsh
@@ -213,6 +213,8 @@ then
     # Install LIbreOffice
     pacman -S --noconfirm libreoffice-fresh
 fi
+
+pacman -S --noconfirm xdg-users-dirs-gtk
 # Installs Yay (AUR Helper)
 #read -p "Install Yay (AUR Helper)?" -n 1 -r
 #echo #to move a line
