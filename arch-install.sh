@@ -39,14 +39,14 @@ mkfs.fat -F32 $efipartition
 lsblk
 echo "Enter the /dev path of root partiton/Linux filesystem: "
 read partition
-mkfs.btrfs $partition
+mkfs.btrfs -f $partition
 
 # Mount root partition to /mnt
 lsblk
 mount $partition /mnt
 
 # Pacstrap the needed packages
-pacstrap /mnt base base-devel linux-zen linux-firmware vim nano
+pacstrap /mnt base base-devel linux-zen linux-firmware vim nano dhcpcd linux-zen-headers networkmanager
 # Generate an /etc/fstab and append it to /mnt/etc/fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 # Create new sh file for arch-chroot
@@ -69,10 +69,10 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install Intel microcode
-    pacman -S --noconfirm intel-ucode dhcpcd iwd
+    pacman -S --noconfirm intel-ucode
 else
     # Install AMD microcode
-    pacman -S --noconfirm amd-ucode dhcpcd iwd linux-zen-headers
+    pacman -S --noconfirm amd-ucode 
 fi
 
 # Change ParallelDownloads from 5 to 15
@@ -130,17 +130,17 @@ sudo os-prober
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Install git for cloning config file
-pacman -S --noconfirm git
+pacman -S --noconfirm git wget
 rm -rf /etc/pacman.conf
-mkdir /.pacm
+mkdir /.pac
 git clone https://github.com/gustavray/pacconf ./.pac
-git clone https://github.com/gustavray/pacconf /etc/
+#git clone https://github.com/gustavray/pacconf /etc/
 cp ./.pac/pacman.conf /etc/
 
 # Update after enabling multilib and other pacman.conf options
 pacman -Syu
 
-pacman -S --noconfirm vim neofetch xorg xorg-server xorg-xinit firefox git pipewire pipewire-alsa pipewire-pulse pavucontrol git dmenu vlc ttf-cascadia-code picom 
+pacman -S --noconfirm vim neofetch xorg xorg-server xorg-xinit firefox git pipewire pipewire-alsa pipewire-pulse pavucontrol git dmenu vlc ttf-cascadia-code 
 
 
 # DE installation 
@@ -189,9 +189,10 @@ then
 fi
 
 # Install a few multilib programs
-echo "Would you like to install Discord, Steam and fonts? [y/n] "
+echo "Would you like to install Discord, Steam and fonts? [y/n] " -n 1 -r
 read answer1
-if [[ $answer1 = y ]] ; then
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
     pacman -S --noconfirm lib32-pipewire discord steam ttf-liberation
 fi
 
@@ -201,10 +202,10 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install optional multilib programs
-    pacman -S --noconfirm code calibre lutris notepadqq obs-studio krita grub-customizer
+    pacman -S --noconfirm calibre lutris notepadqq grub-customizer
 fi
 
-read -p "Install Libre Office? "
+read -p "Install Libre Office? " -n 1 -r
 echo # to move a line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
