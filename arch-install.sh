@@ -119,7 +119,7 @@ usermod -aG wheel,audio,video,storage $user
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
 # GRUB
-pacman -S --noconfirm grub efibootmgr os-prober bluez bluezutils
+pacman -S --noconfirm grub efibootmgr os-prober bluez bluez-utils
 lsblk
 echo "Enter EFI partition again: "
 read efipartition
@@ -150,7 +150,7 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Install Gnome and dependancies
-    pacman -S --noconfirm gnome-shell gdm network-manager-applet gnome-keyring gnome-backgrounds gnome-control-center networkmanager xdg-user-dirs xdg-users-dirs-gtk nautilus gnome-weather gnome-tweak-tool gnome-clocks zed kitty
+    pacman -S --noconfirm gnome-shell gdm network-manager-applet gnome-keyring gnome-backgrounds gnome-control-center networkmanager xdg-user-dirs xdg-users-dirs-gtk nautilus gnome-weather gnome-tweaks gnome-clocks zed kitty
     systemctl enable gdm.service
 fi
 # KDE Plasma
