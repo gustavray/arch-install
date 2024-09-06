@@ -46,7 +46,7 @@ lsblk
 mount $partition /mnt
 
 # Pacstrap the needed packages
-pacstrap /mnt base base-devel linux-zen linux-firmware vim nano dhcpcd linux-zen-headers networkmanager bluez bluezutils
+pacstrap /mnt base base-devel linux-zen linux-firmware vim nano dhcpcd linux-zen-headers networkmanager 
 # Generate an /etc/fstab and append it to /mnt/etc/fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 # Create new sh file for arch-chroot
@@ -119,7 +119,7 @@ usermod -aG wheel,audio,video,storage $user
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
 # GRUB
-pacman -S --noconfirm grub efibootmgr os-prober
+pacman -S --noconfirm grub efibootmgr os-prober bluez bluezutils
 lsblk
 echo "Enter EFI partition again: "
 read efipartition
