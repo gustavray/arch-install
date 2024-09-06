@@ -8,9 +8,10 @@ Credits to the aforementioned people.
 
 Requirements:
 You need to know how to read - Duh! 
-A PC that can run Arch Linux
-A live disc - You can download the ISO here: https://archlinux.org/download/
-A thumb stick/flash drive, unless you're installing it on a virtual machine
+
+- A PC that can run Arch Linux
+- A live disc - You can download the ISO here: https://archlinux.org/download/
+- A thumb stick/flash drive, unless you're installing it on a virtual machine
 
 Installation instructions:
 
@@ -29,5 +30,5 @@ Press Enter and it should be downloaded. You may check by using "dir" if you'd l
 12. When asked for a hostname, enter it, as well as password for root, username(make sure to use LOWERCASE letters only, you can change the name shown in the login screen later, but this is the name that's going to be use in the folder structure and command line), and password for root user. Passwords will not echo, that is, they won't show that you're typing anything, so pay extra attention here.
 13. A few more prompts with options for you to choose, and you'll also be asked for the EFI/boot partition again. Double check on the list of devices above it and enter it (i.e /dev/sda1)
 14. Once you see the Installation complete prompt, you may press the enter key, you will leave arch-chroot mode and will be able to reboot with either "reboot now" or "systemctl reboot".
-15. That's it! You should now be able to see the login screen of KDE Plasma with your username on it.
+15. That's it! You should now be able to see the login screen of Gnome or KDE Plasma with your username on it.
 
