@@ -214,7 +214,7 @@ then
     pacman -S --noconfirm libreoffice-fresh
 fi
 
-pacman -S --noconfirm xdg-users-dirs-gtk
+pacman -S --noconfirm xdg-user-dirs-gtk
 # Installs Yay (AUR Helper)
 #read -p "Install Yay (AUR Helper)?" -n 1 -r
 #echo #to move a line
