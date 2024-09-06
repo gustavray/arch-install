@@ -46,7 +46,7 @@ lsblk
 mount $partition /mnt
 
 # Pacstrap the needed packages
-pacstrap /mnt base base-devel linux-zen linux-firmware vim nano dhcpcd linux-zen-headers networkmanager
+pacstrap /mnt base base-devel linux-zen linux-firmware vim nano dhcpcd linux-zen-headers networkmanager bluez bluezutils
 # Generate an /etc/fstab and append it to /mnt/etc/fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 # Create new sh file for arch-chroot
@@ -165,8 +165,9 @@ fi
 
 # Enable essential services
 systemctl enable dhcpcd.service
-systemctl enable iwd.service
+#systemctl enable iwd.service
 systemctl enable NetworkManager.service
+systemctl enable bluetooth.service
 
 #part3
 
